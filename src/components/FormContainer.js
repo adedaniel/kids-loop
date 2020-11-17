@@ -52,9 +52,15 @@ export default function FormContainer({ title, children, ...rest }) {
             </Select>
           </Stack>
           <Stack mt={[2, 0]} align="center" spacing={3} isInline>
-            <ChakraLink fontSize="sm">Help</ChakraLink>
-            <ChakraLink fontSize="sm">Privacy</ChakraLink>
-            <ChakraLink fontSize="sm">Terms</ChakraLink>
+            <ChakraLink href="#" fontSize="sm">
+              Help
+            </ChakraLink>
+            <ChakraLink href="#" fontSize="sm">
+              Privacy
+            </ChakraLink>
+            <ChakraLink href="#" fontSize="sm">
+              Terms
+            </ChakraLink>
           </Stack>
         </Flex>
       </Stack>
