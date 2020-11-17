@@ -14,19 +14,20 @@ import validator from "validator";
 import FormContainer from "../components/FormContainer";
 import { mockSignInApi } from "../utils";
 
-const Index = () => {
+export default function Signup() {
   const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
-  const linkColor = useColorModeValue("navy", "blue.400"); // Navy in Light mode, blue in Dark mode
+  const linkColor = useColorModeValue("navy", "blue.400");
 
-  const onSubmitSignIn = (event) => {
+  const onSubmitSignUp = (event) => {
     event.preventDefault();
     if (
       !validator.isMobilePhone(emailOrPhone) &&
       !validator.isEmail(emailOrPhone)
-      //To validate if the email or phone number is valid
     ) {
       toast({
         title: "Please enter a valid email or phone number.",
@@ -35,22 +36,30 @@ const Index = () => {
         duration: 4000,
         isClosable: true,
       });
+    } else if (password !== confirmPassword) {
+      toast({
+        title: "Those passwords do not match.",
+        position: "top",
+        status: "warning",
+        duration: 4000,
+        isClosable: true,
+      });
     } else {
-      //If validation is successful
-      setIsLoading(true); // Then Start progress indicator
+      setIsLoading(true);
       mockSignInApi().then(() => {
-        // Call mock api
         setIsLoading(false);
         toast({
-          title: "Login Successful.",
+          title: "Signup successful",
+          description: "You're good to go!",
           position: "top",
           status: "success",
-          duration: 4000,
+          duration: 7000,
           isClosable: true,
         });
-        //Reset Values
         setEmailOrPhone("");
+        setFullName("");
         setPassword("");
+        setConfirmPassword("");
       });
     }
   };
@@ -58,11 +67,19 @@ const Index = () => {
   return (
     <>
       <Head>
-        <title>Sign In - KidsLoop</title>
+        <title>Sign Up - KidsLoop</title>
       </Head>
-      <FormContainer title="Sign In">
-        <form onSubmit={onSubmitSignIn} action="submit">
+      <FormContainer title="Sign Up">
+        <form onSubmit={onSubmitSignUp} action="submit">
           <Stack spacing={3} w="full">
+            <Input
+              h={12}
+              isRequired
+              value={fullName}
+              onChange={(event) => setFullName(event.target.value)}
+              rounded={12}
+              placeholder="Full Name *"
+            />
             <Input
               h={12}
               isRequired
@@ -80,36 +97,39 @@ const Index = () => {
               rounded={12}
               placeholder="Password *"
             />
+            <Input
+              type="password"
+              h={12}
+              value={confirmPassword}
+              onChange={(event) => setConfirmPassword(event.target.value)}
+              isRequired
+              rounded={12}
+              placeholder="Confirm Password *"
+            />
+
             <Flex align="center" justify="space-between">
-              <ChakraLink fontSize="sm" color={linkColor}>
-                <Link href="/forgot-password">
-                  <a>Forgot Password?</a>
-                </Link>
-              </ChakraLink>
               <Button
                 type="submit"
                 isLoading={isLoading}
-                loadingText="Signing In..."
+                loadingText="Signing Up..."
                 h={8}
                 fontSize="sm"
                 colorScheme="blue"
                 rounded={12}
               >
-                Sign In
+                Sign Up
               </Button>
             </Flex>
           </Stack>
         </form>
         <Flex py={2}>
           <ChakraLink fontSize="sm" color={linkColor}>
-            <Link href="/signup">
-              <a>Create an account</a>
+            <Link href="/">
+              <a>Sign In</a>
             </Link>
           </ChakraLink>
         </Flex>
       </FormContainer>
     </>
   );
-};
-
-export default Index;
+}

@@ -14,19 +14,17 @@ import validator from "validator";
 import FormContainer from "../components/FormContainer";
 import { mockSignInApi } from "../utils";
 
-const Index = () => {
+export default function ForgotPassword() {
   const [emailOrPhone, setEmailOrPhone] = useState("");
-  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
-  const linkColor = useColorModeValue("navy", "blue.400"); // Navy in Light mode, blue in Dark mode
+  const linkColor = useColorModeValue("navy", "blue.400");
 
-  const onSubmitSignIn = (event) => {
+  const onSubmitForgotPassword = (event) => {
     event.preventDefault();
     if (
       !validator.isMobilePhone(emailOrPhone) &&
       !validator.isEmail(emailOrPhone)
-      //To validate if the email or phone number is valid
     ) {
       toast({
         title: "Please enter a valid email or phone number.",
@@ -36,21 +34,19 @@ const Index = () => {
         isClosable: true,
       });
     } else {
-      //If validation is successful
-      setIsLoading(true); // Then Start progress indicator
+      setIsLoading(true);
       mockSignInApi().then(() => {
-        // Call mock api
         setIsLoading(false);
         toast({
-          title: "Login Successful.",
+          title: "You've got mail.",
+          description:
+            "We have sent you a verification email. Do follow the steps in the mail",
           position: "top",
           status: "success",
-          duration: 4000,
+          duration: 10000,
           isClosable: true,
         });
-        //Reset Values
         setEmailOrPhone("");
-        setPassword("");
       });
     }
   };
@@ -58,10 +54,10 @@ const Index = () => {
   return (
     <>
       <Head>
-        <title>Sign In - KidsLoop</title>
+        <title>Forgot Password? - KidsLoop</title>
       </Head>
-      <FormContainer title="Sign In">
-        <form onSubmit={onSubmitSignIn} action="submit">
+      <FormContainer title="Forgot Password?">
+        <form onSubmit={onSubmitForgotPassword} action="submit">
           <Stack spacing={3} w="full">
             <Input
               h={12}
@@ -69,33 +65,25 @@ const Index = () => {
               value={emailOrPhone}
               onChange={(event) => setEmailOrPhone(event.target.value)}
               rounded={12}
-              placeholder="Email or Phone *"
+              placeholder="Enter your Email or Phone Number *"
             />
-            <Input
-              type="password"
-              h={12}
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              isRequired
-              rounded={12}
-              placeholder="Password *"
-            />
+
             <Flex align="center" justify="space-between">
               <ChakraLink fontSize="sm" color={linkColor}>
-                <Link href="/forgot-password">
-                  <a>Forgot Password?</a>
+                <Link href="/">
+                  <a>Sign In</a>
                 </Link>
               </ChakraLink>
               <Button
                 type="submit"
                 isLoading={isLoading}
-                loadingText="Signing In..."
+                loadingText="Verifying..."
                 h={8}
                 fontSize="sm"
                 colorScheme="blue"
                 rounded={12}
               >
-                Sign In
+                Reset
               </Button>
             </Flex>
           </Stack>
@@ -110,6 +98,4 @@ const Index = () => {
       </FormContainer>
     </>
   );
-};
-
-export default Index;
+}
